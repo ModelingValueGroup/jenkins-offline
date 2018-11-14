@@ -4,6 +4,8 @@ set -ue
 mavenRepoDir="$1"; shift
       jdkDir="$1"; shift
 
+ MIN_VERSION=2.151
+DOWNLOAD_DIR=tmp-plugins
 
 export MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
@@ -31,3 +33,9 @@ echo "======== build update-center2"
 )
 echo
 
+echo "======== making download dir with plugins"
+java \
+    -cp update-center2/target/update-center2-*-bin*/update-center2-*.jar \
+    org.jvnet.hudson.update_center.MainOnlyDownload \
+    -version  "$MIN_VERSION" \
+    -download "$DOWNLOAD_DIR"
