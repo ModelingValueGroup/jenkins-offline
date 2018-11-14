@@ -37,6 +37,7 @@ echo
 
 echo "======== making download dir with plugins"
 java \
+    -Dmaven.repo.local=$mavenRepoDir \
     -cp update-center2/target/update-center2-*-bin*/update-center2-*.jar \
     org.jvnet.hudson.update_center.MainOnlyDownload \
     -version  "$minVersion" \
