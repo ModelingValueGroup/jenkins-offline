@@ -16,6 +16,7 @@ echo
 echo "======== build juseppe"
 (   cd juseppe
     git checkout master
+    git clean -fdx
     git pull
      ./build.sh
 )
@@ -24,6 +25,7 @@ echo
 echo "======== build update-center2"
 (   cd update-center2
     git checkout master
+    git clean -fdx
     git pull
     ./build.sh
 )
