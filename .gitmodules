@@ -1,0 +1,6 @@
+[submodule "update-center2"]
+	path = update-center2
+	url = https://github.com/ModelingValueGroup/update-center2.git
+[submodule "juseppe"]
+	path = juseppe
+	url = https://github.com/ModelingValueGroup/juseppe.git
