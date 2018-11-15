@@ -16,11 +16,6 @@ export DOWNLOAD_DIR=plugin-tree
 export   MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
 
-echo "======== trial publish to GitHub"
-set -x
-publishOnGitHub "SNAPSHOT" "$token" false /tmp/bigfile.7z.*
-[ xxx ] && exit 0
-
 echo "======== setup submodules"
 git submodule init
 git submodule update
@@ -57,7 +52,7 @@ cp juseppe/juseppe-cli/target/juseppe.jar "$DOWNLOAD_DIR"
 echo
 
 echo "======== zipping it all"
-7z -v2g a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
+7z -mx0 -v500m a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
 rm -rf "$DOWNLOAD_DIR"
 echo
 
