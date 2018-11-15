@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 set -ue
 
+################################################################
 mavenRepoDir="$1"; shift
       jdkDir="$1"; shift
   minVersion="$1"; shift
+       token="$1"; shift
+################################################################
+git clone 'https://github.com/ModelingValueGroup/tools.git'
+. tools/tools.sh
+################################################################
 
-DOWNLOAD_DIR=plugin-tree
-
-export MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
+export DOWNLOAD_DIR=plugin-tree
+export   MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
 
 echo "======== setup submodules"
@@ -42,7 +47,10 @@ java \
     org.jvnet.hudson.update_center.MainOnlyDownload \
     -version  "$minVersion" \
     -download "$DOWNLOAD_DIR"
+cp juseppe/juseppe-cli/target/juseppe.jar "$DOWNLOAD_DIR"
 
-cp juseppe/juseppe-cli/target/juseppe.jar $DOWNLOAD_DIR
-7z a $DOWNLOAD_DIR.7z $DOWNLOAD_DIR
-rm -rf $DOWNLOAD_DIR
+echo "======== zipping it all"
+7z a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
+rm -rf "$DOWNLOAD_DIR"
+
+publishOnGitHub "latest" "$token" false "$DOWNLOAD_DIR.7z"
