@@ -20,7 +20,7 @@ echo "======== trial publish to GitHub"
 echo aap > aap
 7z a aap.7z aap
 set -x
-publishOnGitHub "latest" "$token" false aap aap.7z
+publishOnGitHub "SNAPSHOT" "$token" false aap aap.7z
 echo
 [ ] || exit
 
@@ -65,5 +65,5 @@ rm -rf "$DOWNLOAD_DIR"
 echo
 
 echo "======== publish to GitHub"
-publishOnGitHub "latest" "$token" false "$DOWNLOAD_DIR.7z"
+publishOnGitHub "SNAPSHOT" "$token" false "$DOWNLOAD_DIR.7z"
 echo
