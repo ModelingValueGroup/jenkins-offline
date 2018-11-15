@@ -17,7 +17,8 @@ export   MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
 
 echo "======== trial publish to GitHub"
-dd if=/dev/urandom of=aap bs=$((1024*1024)) count=$((3*1024))
+#dd if=/dev/urandom of=aap bs=$((1024*1024)) count=$((3*1024))
+echo aap >aap
 7z a aap.7z aap
 rm aap
 set -x
