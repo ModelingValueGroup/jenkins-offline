@@ -17,12 +17,14 @@ export   MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
 
 echo "======== trial publish to GitHub"
-echo aap > aap
+dd if=/dev/urandom of=aap bs=$((1024*1024)) count=$((3*1024))
 7z a aap.7z aap
+rm aap
 set -x
-publishOnGitHub "SNAPSHOT" "$token" false aap aap.7z
+publishOnGitHub "SNAPSHOT" "$token" false aap.7z
+rm aap.7z
 echo
-[ ] || exit
+[ xxx ] && exit 0
 
 echo "======== setup submodules"
 git submodule init
