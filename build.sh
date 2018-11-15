@@ -18,7 +18,7 @@ echo
 
 echo "======== trial publish to GitHub"
 set -x
-publishOnGitHub "SNAPSHOT" "$token" false /tmp/bigfile.7z
+publishOnGitHub "SNAPSHOT" "$token" false /tmp/bigfilev.7z.*
 [ xxx ] && exit 0
 
 echo "======== setup submodules"
@@ -57,10 +57,11 @@ cp juseppe/juseppe-cli/target/juseppe.jar "$DOWNLOAD_DIR"
 echo
 
 echo "======== zipping it all"
-7z a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
+7z -v2g a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
 rm -rf "$DOWNLOAD_DIR"
 echo
 
 echo "======== publish to GitHub"
-publishOnGitHub "SNAPSHOT" "$token" false "$DOWNLOAD_DIR.7z"
+publishOnGitHub "SNAPSHOT" "$token" false "$DOWNLOAD_DIR.7z"*
+rm "$DOWNLOAD_DIR.7z"*
 echo
