@@ -7,6 +7,7 @@ mavenRepoDir="$1"; shift
   minVersion="$1"; shift
        token="$1"; shift
 ################################################################
+rm -rf tools
 git clone 'https://github.com/ModelingValueGroup/tools.git'
 . tools/tools.sh
 ################################################################
