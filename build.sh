@@ -15,6 +15,14 @@ export DOWNLOAD_DIR=plugin-tree
 export   MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
 
+echo "======== trial publish to GitHub"
+echo aap > aap
+7z a aap.7z aap
+set -x
+publishOnGitHub "latest" "$token" false aap aap.7z
+echo
+[ ] || exit
+
 echo "======== setup submodules"
 git submodule init
 git submodule update
