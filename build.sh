@@ -18,7 +18,7 @@ echo
 
 echo "======== trial publish to GitHub"
 set -x
-publishOnGitHub "SNAPSHOT" "$token" false /tmp/bigfilev.7z.*
+publishOnGitHub "SNAPSHOT" "$token" false /tmp/bigfile.7z.*
 [ xxx ] && exit 0
 
 echo "======== setup submodules"
