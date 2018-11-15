@@ -48,9 +48,13 @@ java \
     -version  "$minVersion" \
     -download "$DOWNLOAD_DIR"
 cp juseppe/juseppe-cli/target/juseppe.jar "$DOWNLOAD_DIR"
+echo
 
 echo "======== zipping it all"
 7z a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
 rm -rf "$DOWNLOAD_DIR"
+echo
 
+echo "======== publish to GitHub"
 publishOnGitHub "latest" "$token" false "$DOWNLOAD_DIR.7z"
+echo
