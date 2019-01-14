@@ -62,11 +62,11 @@ popd
 mkdir "$ADD_TREE"
 (cd "$PLUGIN_TREE"; find . -type f) \
     | while read f; do
-        if [[ -f "$PREV_TREE/$f" ]]; then
+        if [[ -f "$PREV_TREE/$PLUGIN_TREE/$f" ]]; then
             echo ">>> prev and now: $f"
         else
             echo ">>> NEW         : $f"
-            mkdir "$(dirname "$ADD_TREE/$f")"
+            mkdir -p "$(dirname "$ADD_TREE/$f")"
             ln "$PLUGIN_TREE/$f" "$ADD_TREE/$f"
         fi
     done
