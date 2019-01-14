@@ -54,7 +54,7 @@ echo
 echo "======== get previous release to compare against"
 downloadLatestRelease "$token" prevRelease
 pushd prevRelease
-7z e *.001
+7z x *.001
 popd
 echo
 true && exit 7
