@@ -6,6 +6,7 @@ mavenRepoDir="$1"; shift
       jdkDir="$1"; shift
   minVersion="$1"; shift
        token="$1"; shift
+     publish="$1"; shift
 ################################################################
 rm -rf tools
 git clone 'https://github.com/ModelingValueGroup/tools.git'
@@ -41,13 +42,24 @@ echo "======== build update-center2"
 )
 echo
 
-echo "======== making download dir with plugins"
+echo "======== making download dir with plugins from dentral repos"
 java \
     -Dmaven.repo.local=$mavenRepoDir \
     -cp update-center2/target/update-center2-*-bin*/update-center2-*.jar \
     org.jvnet.hudson.update_center.MainOnlyDownload \
     -version  "$minVersion" \
     -download "$DOWNLOAD_DIR"
+echo
+
+echo "======== get previous release to compare against"
+downloadLatestRelease "$token" prevRelease
+pushd prevRelease
+7z e *.001
+popd
+echo
+true && exit 7
+
+echo "======== copy juseppe jar into downloads"
 cp juseppe/juseppe-cli/target/juseppe.jar "$DOWNLOAD_DIR"
 echo
 
@@ -56,7 +68,9 @@ echo "======== zipping it all"
 rm -rf "$DOWNLOAD_DIR"
 echo
 
-echo "======== publish to GitHub"
-publishOnGitHub "SNAPSHOT" "$token" false "$DOWNLOAD_DIR.7z"*
-rm "$DOWNLOAD_DIR.7z"*
-echo
+if [[ $publish == true ]]; then
+    echo "======== publish to GitHub"
+    publishOnGitHub "$(date "+State-%Y-%m%d-%H%M")" "$token" false "$DOWNLOAD_DIR.7z"*
+    rm "$DOWNLOAD_DIR.7z"*
+    echo
+fi
