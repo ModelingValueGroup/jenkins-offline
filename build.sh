@@ -13,8 +13,10 @@ git clone 'https://github.com/ModelingValueGroup/tools.git'
 . tools/tools.sh
 ################################################################
 
-export DOWNLOAD_DIR=plugin-tree
-export   MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
+export PLUGIN_TREE=plugin-tree
+export    ADD_TREE=add-tree
+export   PREV_TREE=prev-tree
+export  MAVEN_OPTS="-Dmaven.repo.local=$mavenRepoDir"
 echo
 
 echo "======== setup submodules"
@@ -48,29 +50,44 @@ java \
     -cp update-center2/target/update-center2-*-bin*/update-center2-*.jar \
     org.jvnet.hudson.update_center.MainOnlyDownload \
     -version  "$minVersion" \
-    -download "$DOWNLOAD_DIR"
+    -download "$PLUGIN_TREE"
 echo
 
 echo "======== get previous release to compare against"
-downloadLatestRelease "$token" prevRelease
-pushd prevRelease
-7z x *.001
+downloadLatestRelease "$token" $PREV_TREE
+pushd "$PREV_TREE"
+7z x *.7z.001
+rm   *.7z.0*
 popd
+mkdir "$ADD_TREE"
+(cd "$PLUGIN_TREE"; find . -type f) \
+    | while read f; do
+        if [[ -f "$PREV_TREE/$f" ]]; then
+            echo ">>> prev and now: $f"
+        else
+            echo ">>> NEW         : $f"
+            mkdir "$(dirname "$ADD_TREE/$f")"
+            ln "$PLUGIN_TREE/$f" "$ADD_TREE/$f"
+        fi
+    done
+#rm -rf "$PREV_TREE"
 echo
-true && exit 7
 
 echo "======== copy juseppe jar into downloads"
-cp juseppe/juseppe-cli/target/juseppe.jar "$DOWNLOAD_DIR"
+cp juseppe/juseppe-cli/target/juseppe.jar "$PLUGIN_TREE"
 echo
 
 echo "======== zipping it all"
-7z -mx0 -v500m a "$DOWNLOAD_DIR.7z" "$DOWNLOAD_DIR" > 7z.log
-rm -rf "$DOWNLOAD_DIR"
+7z -mx0 -v500m a "$PLUGIN_TREE.7z" "$PLUGIN_TREE" > 7z.log
+7z -mx0 -v500m a "$ADD_TREE.7z"    "$ADD_TREE"    > 7z.log
+rm -rf "$PLUGIN_TREE"
+rm -rf "$ADD_TREE"
 echo
 
 if [[ $publish == true ]]; then
     echo "======== publish to GitHub"
-    publishOnGitHub "$(date "+State-%Y-%m%d-%H%M")" "$token" false "$DOWNLOAD_DIR.7z"*
-    rm "$DOWNLOAD_DIR.7z"*
+    publishOnGitHub "$(date "+State-%Y-%m%d-%H%M")" "$token" false "$PLUGIN_TREE.7z"* "$ADD_TREE.7z"*
+    rm "$PLUGIN_TREE.7z"*
+    rm "$ADD_TREE.7z"*
     echo
 fi
