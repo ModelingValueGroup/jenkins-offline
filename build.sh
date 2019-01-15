@@ -56,6 +56,7 @@ echo
 echo "======== get previous release to compare against"
 downloadLatestRelease "$token" $PREV_TREE
 pushd "$PREV_TREE"
+rm "$ADD_TREE"*.7z.*
 7z x *.7z.001
 rm   *.7z.0*
 popd
